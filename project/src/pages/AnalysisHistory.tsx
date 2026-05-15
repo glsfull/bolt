@@ -3,14 +3,6 @@ import { Activity, ChevronDown, ChevronUp, TrendingDown, TrendingUp, Minus, Chec
 import { DEMO_HISTORY, DEMO_TRENDS } from '../data/demoAnalysis';
 import type { MarkerTrend } from '../data/demoAnalysis';
 
-const TYPE_LABELS: Record<string, string> = {
-  blood: 'ОАК',
-  biochem: 'Биохимия',
-  hormones: 'Гормоны',
-  urine: 'Моча',
-  other: 'Прочее',
-};
-
 function MiniChart({ trend }: { trend: MarkerTrend }) {
   const values = trend.points.map(p => p.value);
   const minV = Math.min(...values) * 0.92;
