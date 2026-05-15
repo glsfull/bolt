@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Мои анализы",
+    "slug": "moi-analizy",
+    "scheme": "moi-analizy",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "experiments": {
+      "typedRoutes": true
+    },
+    "ios": {
+      "bundleIdentifier": "ru.moianalizy.mobile"
+    },
+    "android": {
+      "package": "ru.moianalizy.mobile"
+    }
+  }
+}

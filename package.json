@@ -1,0 +1,7 @@
+{
+  "name": "bolt-rewrite-workspace",
+  "private": true,
+  "scripts": {
+    "test": "node tests/route-contract.test.mjs"
+  }
+}
