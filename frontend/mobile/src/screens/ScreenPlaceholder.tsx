@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 
 import { medicalDisclaimer, routeMap, type AppRouteId } from '../navigation/routes';
+import { screenStateInventory } from '../navigation/screenStates';
 import { colors, radius, spacing } from '../theme';
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 
 export function ScreenPlaceholder({ routeId }: Props) {
   const route = routeMap.find((item) => item.id === routeId);
+  const stateGroup = screenStateInventory.find((item) => item.screenId === routeId);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.gray[50], padding: spacing[4], paddingTop: spacing[8] }}>
@@ -36,6 +38,15 @@ export function ScreenPlaceholder({ routeId }: Props) {
           <Text style={{ color: colors.amber[800], fontSize: 12, lineHeight: 17, marginTop: spacing[4] }}>
             {medicalDisclaimer}
           </Text>
+        ) : null}
+        {stateGroup ? (
+          <View style={{ marginTop: spacing[4], gap: spacing[2] }}>
+            {stateGroup.states.map((state) => (
+              <Text key={state.id} style={{ color: colors.gray[700], fontSize: 12, lineHeight: 17 }}>
+                {state.label}: {state.acceptance}
+              </Text>
+            ))}
+          </View>
         ) : null}
       </View>
     </View>
