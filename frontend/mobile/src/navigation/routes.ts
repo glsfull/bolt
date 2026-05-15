@@ -1,5 +1,6 @@
 export type AppRouteId =
   | 'home'
+  | 'auth'
   | 'upload'
   | 'camera'
   | 'results'
@@ -11,6 +12,8 @@ export type AppRouteId =
   | 'encyclopedia'
   | 'profile'
   | 'programs'
+  | 'programDetail'
+  | 'activeProgram'
   | 'admin';
 
 export type RouteDefinition = {
@@ -31,6 +34,13 @@ export const routeMap: RouteDefinition[] = [
     prototypeTab: 'home',
     sourceScreen: 'project/src/pages/HealthHome.tsx',
     referenceArtifact: 'project/screenshot_01_home.html',
+  },
+  {
+    id: 'auth',
+    label: 'Авторизация',
+    path: '/auth',
+    prototypeTab: 'auth',
+    sourceScreen: 'project/src/components/AuthModal.tsx',
   },
   {
     id: 'upload',
@@ -104,6 +114,13 @@ export const routeMap: RouteDefinition[] = [
     sourceScreen: 'project/src/pages/Encyclopedia.tsx',
   },
   {
+    id: 'encyclopedia',
+    label: 'Карточка показателя',
+    path: '/app/encyclopedia/:markerId',
+    prototypeTab: 'encyclopediaMarker',
+    sourceScreen: 'project/src/pages/Encyclopedia.tsx',
+  },
+  {
     id: 'profile',
     label: 'Профиль здоровья',
     path: '/app/profile',
@@ -115,6 +132,20 @@ export const routeMap: RouteDefinition[] = [
     label: 'Программы здоровья',
     path: '/app/programs',
     prototypeTab: 'programs',
+    sourceScreen: 'project/src/pages/HealthPrograms.tsx',
+  },
+  {
+    id: 'programDetail',
+    label: 'Карточка программы',
+    path: '/app/programs/:programId',
+    prototypeTab: 'programDetail',
+    sourceScreen: 'project/src/pages/HealthPrograms.tsx',
+  },
+  {
+    id: 'activeProgram',
+    label: 'Активная программа',
+    path: '/app/programs/active',
+    prototypeTab: 'activeProgram',
     sourceScreen: 'project/src/pages/HealthPrograms.tsx',
   },
   {
