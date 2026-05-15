@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { AiScreen } from '../../src/features/ai/AiScreen';
 
 export default function AiRoute() {
-  return <ScreenPlaceholder routeId="symptoms" />;
+  return <AiScreen />;
 }
