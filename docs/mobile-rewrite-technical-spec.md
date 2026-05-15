@@ -4,6 +4,8 @@
 
 Документ подготовлен на основе анализа папки `project`, перенесенной из Bolt.new. Папка `project` рассматривается как исходный прототип только для чтения: ее файлы не изменяются, а используются как эталон функциональности, структуры экранов, визуального стиля и пользовательских сценариев.
 
+В новой реализации нельзя дорабатывать код внутри `project/`. Для production-проекта нужно создать отдельные папки верхнего уровня `frontend/` и `backend/`, чтобы исходный прототип оставался неизменяемым эталоном, а новая кодовая база развивалась независимо.
+
 Цель переработки: заново реализовать продукт как полноценное мобильное приложение для Google Play и App Store с сохранением дизайна, блоков, таблиц, навигации и пользовательских сценариев в максимально точной копии текущего прототипа.
 
 ## 2. Анализ текущего проекта
@@ -95,12 +97,46 @@
 
 ## 4. Целевая архитектура
 
-### 4.1. Клиентское мобильное приложение
-
-Предлагаемая структура нового мобильного проекта:
+Целевая структура репозитория для реализации:
 
 ```text
-mobile/
+frontend/
+  mobile/
+    app/
+    src/
+      components/
+      features/
+      services/
+      domain/
+      theme/
+      lib/
+  web-admin/
+    app/
+    src/
+backend/
+  supabase/
+    migrations/
+    functions/
+  services/
+    ai/
+    ocr/
+    reports/
+  queues/
+project/
+  ...
+```
+
+`project/` остается только источником требований и эталонных экранов. `frontend/`
+содержит мобильное приложение и при необходимости web-admin, а `backend/`
+содержит Supabase-схему, Edge Functions, интеграции AI/OCR, очереди обработки и
+генерацию отчетов.
+
+### 4.1. Клиентское мобильное приложение
+
+Предлагаемая структура мобильного приложения внутри `frontend/mobile`:
+
+```text
+frontend/mobile/
   app/
     (auth)/
     (tabs)/
@@ -145,15 +181,21 @@ mobile/
 ### 4.2. Backend и интеграции
 
 ```text
-supabase/
-  migrations/
-  functions/
-    process-analysis/
-    run-ocr/
-    generate-doctor-report/
-    symptom-checker/
-    risk-assessment/
-    admin-settings/
+backend/
+  supabase/
+    migrations/
+    functions/
+      process-analysis/
+      run-ocr/
+      generate-doctor-report/
+      symptom-checker/
+      risk-assessment/
+      admin-settings/
+  services/
+    ai/
+    ocr/
+    reports/
+  queues/
 ```
 
 Основной поток обработки анализа:
@@ -271,7 +313,8 @@ supabase/
 
 ### Этап 1. Новый мобильный каркас
 
-- Создать Expo/React Native проект.
+- Создать папки `frontend/` и `backend/` рядом с `project/`.
+- Создать Expo/React Native проект в `frontend/mobile`.
 - Настроить TypeScript, ESLint, Prettier.
 - Подключить Expo Router.
 - Подключить Supabase client.
@@ -289,6 +332,7 @@ supabase/
 
 ### Этап 3. Данные и Supabase
 
+- Подготовить Supabase-структуру в `backend/supabase`.
 - Переработать миграции под production-схему.
 - Настроить RLS.
 - Подключить профиль, историю анализов, лекарства, программы.
@@ -338,6 +382,7 @@ supabase/
 ## 8. Критерии приемки
 
 - Папка `project` не изменена.
+- Новая реализация ведется в отдельных папках `frontend/` и `backend/`.
 - Создан новый мобильный проект или подготовлено полное ТЗ для его создания.
 - Все основные экраны из `project` учтены в roadmap.
 - Выбран стек React Native + Expo + TypeScript + Supabase.
