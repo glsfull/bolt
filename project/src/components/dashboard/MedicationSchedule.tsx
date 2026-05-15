@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, Plus, X, Clock, Check, Pill, Pencil } from 'lucide-react';
+import { Bell, Plus, X, Clock, Check, Pill } from 'lucide-react';
 import type { DemoMedication } from '../../data/demoAnalysis';
 import { DEMO_MEDICATIONS } from '../../data/demoAnalysis';
 

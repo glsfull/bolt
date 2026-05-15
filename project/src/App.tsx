@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
   FileText, Brain, ShieldCheck, TrendingUp, Upload, ChevronRight,
-  Star, Check, Menu, X, LogOut, User, Activity, Microscope, Heart,
-  Zap, ArrowRight, BarChart3, Camera, Salad, Settings
+  Star, Check, Menu, X, User, Activity, Microscope, Heart,
+  Zap, ArrowRight, Camera, Salad, Settings
 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
@@ -152,7 +152,6 @@ export default function App() {
   const [authModal, setAuthModal] = useState<'login' | 'register' | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -169,11 +168,6 @@ export default function App() {
     window.addEventListener('scroll', handler);
     return () => window.removeEventListener('scroll', handler);
   }, []);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setUserMenuOpen(false);
-  };
 
   const openAuth = (mode: 'login' | 'register') => {
     setMobileMenuOpen(false);
@@ -220,51 +214,18 @@ export default function App() {
 
             {/* Auth buttons desktop */}
             <div className="hidden md:flex items-center gap-3">
-              {user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-xl px-3 py-2 transition-colors"
-                  >
-                    <div className="w-7 h-7 bg-emerald-500 rounded-lg flex items-center justify-center">
-                      <User size={14} className="text-white" />
-                    </div>
-                    <span className="text-sm font-semibold text-gray-700 max-w-[120px] truncate">
-                      {user.user_metadata?.full_name || user.email?.split('@')[0]}
-                    </span>
-                  </button>
-                  {userMenuOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 overflow-hidden">
-                      <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="text-xs text-gray-400">Вы вошли как</p>
-                        <p className="text-sm font-medium text-gray-700 truncate">{user.email}</p>
-                      </div>
-                      <button
-                        onClick={handleSignOut}
-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                      >
-                        <LogOut size={15} />
-                        Выйти
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <>
-                  <button
-                    onClick={() => openAuth('login')}
-                    className="text-sm font-semibold text-gray-700 hover:text-gray-900 px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors"
-                  >
-                    Войти
-                  </button>
-                  <button
-                    onClick={() => openAuth('register')}
-                    className="text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 px-5 py-2 rounded-xl transition-colors shadow-md shadow-emerald-200"
-                  >
-                    Начать бесплатно
-                  </button>
-                </>
-              )}
+              <button
+                onClick={() => openAuth('login')}
+                className="text-sm font-semibold text-gray-700 hover:text-gray-900 px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors"
+              >
+                Войти
+              </button>
+              <button
+                onClick={() => openAuth('register')}
+                className="text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 px-5 py-2 rounded-xl transition-colors shadow-md shadow-emerald-200"
+              >
+                Начать бесплатно
+              </button>
             </div>
 
             {/* Mobile menu button */}
@@ -286,20 +247,12 @@ export default function App() {
               <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="block text-gray-700 font-medium py-2">Тарифы</a>
               <a href="#app" onClick={() => setMobileMenuOpen(false)} className="block text-gray-700 font-medium py-2">Приложение</a>
               <div className="pt-2 border-t border-gray-100 space-y-2">
-                {user ? (
-                  <button onClick={handleSignOut} className="w-full flex items-center justify-center gap-2 py-3 text-red-500 font-semibold border border-red-200 rounded-xl">
-                    <LogOut size={16} /> Выйти
-                  </button>
-                ) : (
-                  <>
-                    <button onClick={() => openAuth('login')} className="w-full py-3 text-gray-700 font-semibold border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
-                      Войти
-                    </button>
-                    <button onClick={() => openAuth('register')} className="w-full py-3 text-white font-semibold bg-emerald-500 rounded-xl hover:bg-emerald-600 transition-colors">
-                      Начать бесплатно
-                    </button>
-                  </>
-                )}
+                <button onClick={() => openAuth('login')} className="w-full py-3 text-gray-700 font-semibold border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                  Войти
+                </button>
+                <button onClick={() => openAuth('register')} className="w-full py-3 text-white font-semibold bg-emerald-500 rounded-xl hover:bg-emerald-600 transition-colors">
+                  Начать бесплатно
+                </button>
               </div>
             </div>
           </div>
@@ -995,11 +948,6 @@ export default function App() {
           onSuccess={() => setAuthModal(null)}
           onSwitchMode={setAuthModal}
         />
-      )}
-
-      {/* Click outside user menu */}
-      {userMenuOpen && (
-        <div className="fixed inset-0 z-30" onClick={() => setUserMenuOpen(false)} />
       )}
     </div>
   );

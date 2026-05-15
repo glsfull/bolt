@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   Activity, Upload, BarChart3, Brain, Pill, LogOut,
-  TrendingUp, ShieldCheck, BookOpen, User, Home,
+  ShieldCheck, BookOpen, User, Home,
   ChevronRight, Menu, History, Camera, Salad, Settings
 } from 'lucide-react';
 import type { SupabaseUser } from '../types';

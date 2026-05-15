@@ -1,4 +1,4 @@
-import { Upload, BarChart3, Brain, Pill, TrendingUp, ShieldCheck, BookOpen, User, AlertTriangle, CheckCircle, ChevronRight, Activity, Clock } from 'lucide-react';
+import { Upload, BarChart3, Brain, Pill, TrendingUp, ShieldCheck, BookOpen, AlertTriangle, CheckCircle, ChevronRight, Activity, Clock } from 'lucide-react';
 import type { SupabaseUser } from '../types';
 import { DEMO_HISTORY, DEMO_RISKS, DEMO_MEDICATIONS, HEALTH_SCORE, DEMO_MARKERS } from '../data/demoAnalysis';
 
