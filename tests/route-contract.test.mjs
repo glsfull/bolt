@@ -265,6 +265,7 @@ assert.match(implementationPlanSource, /## 13\. Что сделано на эт�
 assert.match(implementationPlanSource, /## 15\. Что сделано на этапе 5/, 'implementation plan should document completed stage 5');
 assert.match(implementationPlanSource, /## 16\. Рекомендуемые следующие шаги после issue 28/, 'implementation plan should document recommended next steps after issue 28');
 assert.match(implementationPlanSource, /## 17\. Реализация issue 34: этап 6/, 'implementation plan should document issue 34 stage 6');
+assert.match(implementationPlanSource, /## 18\. Реализация issue 36: этап 7/, 'implementation plan should document issue 36 stage 7');
 
 for (const nextStep of [
   'Expo web',
@@ -294,4 +295,15 @@ for (const issue34Token of [
   'placeholder-экранов',
 ]) {
   assert.match(implementationPlanSource, new RegExp(issue34Token), `missing issue 34 implementation detail ${issue34Token}`);
+}
+
+for (const issue36Token of [
+  'следующему этапу выполнения задачи',
+  'Предпочтительные шаги',
+  'После вопроса о Supabase окружении следующий шаг',
+  'После вопроса о file picker следующий шаг',
+  'После вопроса об orchestration следующий шаг',
+  'остается 6 крупных задач',
+]) {
+  assert.match(implementationPlanSource, new RegExp(issue36Token), `missing issue 36 implementation detail ${issue36Token}`);
 }
