@@ -65,15 +65,13 @@ export async function uploadAnalysisFile(file: { fileName: string; mimeType: str
   return data;
 }
 
-export async function uploadAnalysisAndRunPipeline(file: UploadableAnalysisFile) {
+export async function uploadAnalysisFileAndTrackJob(file: UploadableAnalysisFile) {
   const uploadSession = await uploadAnalysisFile(file);
   await uploadBinaryToSignedUrl(uploadSession.upload.signed_url, file);
-  await runOcrForJob(uploadSession.job.id);
-  const interpretation = await interpretAnalysisForJob(uploadSession.job.id);
 
   return {
     ...uploadSession,
-    interpretation,
+    status: uploadSession.job.status,
   };
 }
 

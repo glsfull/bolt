@@ -222,13 +222,12 @@ for (const token of ['analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processi
   assert.match(uploadScreenSource + cameraScreenSource, new RegExp(token), `missing backend job contract token ${token}`);
 }
 
-for (const token of ['pickAnalysisFile', 'DocumentPicker.getDocumentAsync', 'uploadAnalysisAndRunPipeline', 'signed_url', 'job.id']) {
+for (const token of ['pickAnalysisFile', 'DocumentPicker.getDocumentAsync', 'uploadAnalysisFileAndTrackJob', 'signed_url', 'job.id']) {
   assert.match(uploadScreenSource + supabaseReadSource, new RegExp(token), `upload flow missing ${token}`);
 }
 
-for (const token of ['uploadBinaryToSignedUrl', 'runOcrForJob', 'interpretAnalysisForJob']) {
-  assert.match(supabaseReadSource, new RegExp(token), `upload orchestration missing ${token}`);
-}
+assert.match(supabaseReadSource, /uploadBinaryToSignedUrl/, 'upload flow should PUT the binary to the signed URL');
+assert.doesNotMatch(supabaseReadSource, /export async function uploadAnalysisAndRunPipeline/, 'client should not expose manual OCR/AI orchestration');
 
 for (const token of ['getAnalysisProcessingJob', 'getAnalysisResult', 'setInterval', 'error_message', 'analysis_markers']) {
   assert.match(resultScreenSource, new RegExp(token), `result screen missing live job/marker token ${token}`);

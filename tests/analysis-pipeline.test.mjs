@@ -45,11 +45,12 @@ assert.deepEqual(
 );
 
 const readLayerSource = await import('node:fs').then(({ readFileSync }) => readFileSync('frontend/mobile/src/services/supabase/readLayer.ts', 'utf8'));
-const uploadPipelinePosition = readLayerSource.indexOf('export async function uploadAnalysisAndRunPipeline');
-assert.notEqual(uploadPipelinePosition, -1, 'mobile read layer should expose full upload pipeline orchestration');
+const uploadPipelinePosition = readLayerSource.indexOf('export async function uploadAnalysisFileAndTrackJob');
+assert.notEqual(uploadPipelinePosition, -1, 'mobile read layer should expose upload-only job tracking pipeline');
 
 const uploadPipelineSource = readLayerSource.slice(uploadPipelinePosition, readLayerSource.indexOf('export async function uploadBinaryToSignedUrl'));
 assert.match(uploadPipelineSource, /uploadAnalysisFile\(file\)/, 'pipeline should create signed upload session first');
 assert.match(uploadPipelineSource, /uploadBinaryToSignedUrl\(uploadSession\.upload\.signed_url, file\)/, 'pipeline should PUT the real file to signed URL');
-assert.match(uploadPipelineSource, /runOcrForJob\(uploadSession\.job\.id\)/, 'pipeline should advance job to OCR');
-assert.match(uploadPipelineSource, /interpretAnalysisForJob\(uploadSession\.job\.id\)/, 'pipeline should advance job to completed interpretation');
+assert.doesNotMatch(uploadPipelineSource, /runOcrForJob\(/, 'client pipeline must not invoke OCR directly');
+assert.doesNotMatch(uploadPipelineSource, /interpretAnalysisForJob\(/, 'client pipeline must not invoke AI normalization directly');
+assert.match(uploadPipelineSource, /status:\s*uploadSession\.job\.status/, 'pipeline should return the queued job status for UI tracking');
