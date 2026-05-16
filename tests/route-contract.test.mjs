@@ -22,6 +22,7 @@ const risksRouteSource = readFileSync('frontend/mobile/app/risks/index.tsx', 'ut
 const reportRouteSource = readFileSync('frontend/mobile/app/report/index.tsx', 'utf8');
 const risksScreenSource = readFileSync('frontend/mobile/src/features/risks/RisksScreen.tsx', 'utf8');
 const reportScreenSource = readFileSync('frontend/mobile/src/features/report/DoctorReportScreen.tsx', 'utf8');
+const implementationPlanSource = readFileSync('docs/Реализация.md', 'utf8');
 
 const requiredRouteIds = [
   'home',
@@ -151,3 +152,18 @@ for (const token of ['analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processi
 
 assert.match(risksScreenSource, /medicalDisclaimer/, 'risk screen should show medical disclaimer');
 assert.match(reportScreenSource, /medicalDisclaimer/, 'doctor report screen should include medical disclaimer');
+
+assert.match(implementationPlanSource, /## 13\. Что сделано на этапе 3/, 'implementation plan should document completed stage 3');
+assert.match(implementationPlanSource, /## 14\. Рекомендуемые следующие шаги/, 'implementation plan should document recommended next steps');
+
+for (const nextStep of [
+  'Expo web',
+  'применяемые Supabase migrations',
+  'RLS-политики',
+  'Edge Functions',
+  'private Storage',
+  'placeholder-экраны',
+  'визуальную регрессию',
+]) {
+  assert.match(implementationPlanSource, new RegExp(nextStep), `missing recommended next step ${nextStep}`);
+}
