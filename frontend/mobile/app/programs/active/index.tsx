@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../../src/screens/ScreenPlaceholder';
+import { ActiveProgramScreen } from '../../../src/features/programs/ProgramDetailScreen';
 
 export default function ActiveProgramRoute() {
-  return <ScreenPlaceholder routeId="activeProgram" />;
+  return <ActiveProgramScreen />;
 }

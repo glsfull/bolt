@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { MedicationsScreen } from '../../src/features/medications/MedicationsScreen';
 
 export default function MedicationsRoute() {
-  return <ScreenPlaceholder routeId="meds" />;
+  return <MedicationsScreen />;
 }
