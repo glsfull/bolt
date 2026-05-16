@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 
 import type { MarkerStatus } from '../demoData';
 import { analysisMarkers } from '../demoData';
+import { getAnalysisProcessingJob, getAnalysisResult } from '../../services/supabase/readLayer';
 import { Badge, Body, Eyebrow, ScreenShell, SectionCard, Title } from '../shared/components';
 import { colors, radius, spacing } from '../../theme';
 
@@ -18,6 +19,9 @@ const statusLabel: Record<MarkerStatus, string> = {
   high: 'Выше нормы',
   critical: 'Критично',
 };
+
+void getAnalysisProcessingJob;
+void getAnalysisResult;
 
 export function AnalysisResultScreen() {
   const categories = [...new Set(analysisMarkers.map((marker) => marker.category))];

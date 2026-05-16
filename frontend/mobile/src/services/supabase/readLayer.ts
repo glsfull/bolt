@@ -30,6 +30,32 @@ export async function getLatestWarnings() {
   return readOrFallback(supabase?.from('analysis_warnings').select('*').order('created_at', { ascending: false }).limit(5) ?? null, demoData.latestWarnings);
 }
 
-export async function getAnalysisResult(_analysisId: string) {
-  return readOrFallback(supabase?.from('analysis_markers').select('*').order('category') ?? null, demoData.analysisMarkers);
+export async function getAnalysisProcessingJob(analysisId: string) {
+  return readOrFallback(
+    supabase?.from('analysis_jobs').select('*').eq('analysis_id', analysisId).order('created_at', { ascending: false }).limit(1).maybeSingle() ?? null,
+    demoData.analysisProcessingJob,
+  );
+}
+
+export async function getAnalysisResult(analysisId: string) {
+  return readOrFallback(
+    supabase?.from('analysis_markers').select('*').eq('analysis_id', analysisId).order('category') ?? null,
+    demoData.analysisMarkers,
+  );
+}
+
+export async function uploadAnalysisFile(file: { fileName: string; mimeType: string; byteSize: number }) {
+  if (!isSupabaseConfigured || !supabase) {
+    return demoData.analysisProcessingJob;
+  }
+
+  const { data, error } = await supabase.functions.invoke('upload-analysis-file', {
+    body: file,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }

@@ -18,6 +18,9 @@ const cameraRouteSource = readFileSync('frontend/mobile/app/analysis/camera.tsx'
 const resultRouteSource = readFileSync('frontend/mobile/app/analysis/result/[id].tsx', 'utf8');
 const resultScreenSource = readFileSync('frontend/mobile/src/features/analyses/AnalysisResultScreen.tsx', 'utf8');
 const uploadScreenSource = readFileSync('frontend/mobile/src/features/analyses/UploadAnalysisScreen.tsx', 'utf8');
+const uploadFunctionSource = readFileSync('backend/supabase/functions/upload-analysis-file/index.ts', 'utf8');
+const runOcrFunctionSource = readFileSync('backend/supabase/functions/run-ocr/index.ts', 'utf8');
+const interpretFunctionSource = readFileSync('backend/supabase/functions/interpret-analysis/index.ts', 'utf8');
 const cameraScreenSource = readFileSync('frontend/mobile/src/features/analyses/CameraAnalysisScreen.tsx', 'utf8');
 const risksRouteSource = readFileSync('frontend/mobile/app/risks/index.tsx', 'utf8');
 const reportRouteSource = readFileSync('frontend/mobile/app/report/index.tsx', 'utf8');
@@ -219,6 +222,18 @@ for (const token of ['analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processi
   assert.match(uploadScreenSource + cameraScreenSource, new RegExp(token), `missing backend job contract token ${token}`);
 }
 
+for (const token of ['validateUploadRequest', 'createSignedUploadUrl', 'analysis_files', 'analysis_jobs']) {
+  assert.match(uploadFunctionSource, new RegExp(token), `upload-analysis-file missing ${token}`);
+}
+
+for (const token of ['deterministicOcr', 'ocr_attempts', 'ocr_confidence', 'failed', 'ai_processing']) {
+  assert.match(runOcrFunctionSource, new RegExp(token), `run-ocr missing ${token}`);
+}
+
+for (const token of ['normalizeOcrMarkers', 'analysis_markers', 'rawText', 'completed', 'failed']) {
+  assert.match(interpretFunctionSource, new RegExp(token), `interpret-analysis missing ${token}`);
+}
+
 assert.match(risksScreenSource, /medicalDisclaimer/, 'risk screen should show medical disclaimer');
 assert.match(reportScreenSource, /medicalDisclaimer/, 'doctor report screen should include medical disclaimer');
 
@@ -239,7 +254,8 @@ for (const token of ['aiOcrSettings', 'limits', 'disabledFeatures', 'audit_log']
 }
 
 assert.match(implementationPlanSource, /## 13\. Что сделано на этапе 3/, 'implementation plan should document completed stage 3');
-assert.match(implementationPlanSource, /## 15\. Рекомендуемые следующие шаги после issue 26/, 'implementation plan should document recommended next steps after issue 26');
+assert.match(implementationPlanSource, /## 15\. Что сделано на этапе 5/, 'implementation plan should document completed stage 5');
+assert.match(implementationPlanSource, /## 16\. Рекомендуемые следующие шаги после issue 28/, 'implementation plan should document recommended next steps after issue 28');
 
 for (const nextStep of [
   'Expo web',
@@ -255,6 +271,6 @@ for (const nextStep of [
 
 assert.match(
   implementationPlanSource,
-  /остается 10 крупных задач/,
-  'implementation plan should state remaining project task count after issue 26',
+  /остается 8 крупных задач/,
+  'implementation plan should state remaining project task count after issue 28',
 );

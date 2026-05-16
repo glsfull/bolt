@@ -12,6 +12,18 @@ export const analysisHistory = [
   { id: 'vit-2026-04-11', title: 'Витамины и минералы', date: '11 апреля 2026', deviations: 1, status: 'stable' },
 ];
 
+export const analysisProcessingJob = {
+  id: 'job-demo-cbc',
+  analysis_id: 'cbc-2026-05-13',
+  status: 'completed',
+  error_message: null,
+  metadata: {
+    ocr_provider: 'deterministic-v1',
+    ocr_confidence: 0.91,
+    ai_marker_count: 4,
+  },
+};
+
 export const symptomTags = ['Слабость', 'Головная боль', 'Температура', 'Боль в горле', 'Тошнота'];
 
 export const healthPrograms = [
