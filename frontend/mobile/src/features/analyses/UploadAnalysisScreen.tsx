@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import * as DocumentPicker from 'expo-document-picker';
 import { Pressable, Text, View } from 'react-native';
 
-import { runOcrForJob, uploadAnalysisFile, uploadBinaryToSignedUrl } from '../../services/supabase/readLayer';
+import { uploadAnalysisAndRunPipeline } from '../../services/supabase/readLayer';
 import { colors, radius, spacing } from '../../theme';
 import { Body, Eyebrow, ScreenShell, SectionCard, Title } from '../shared/components';
 
@@ -10,7 +11,18 @@ type PickedAnalysisFile = { fileName: string; mimeType: string; byteSize: number
 
 async function pickAnalysisFile(): Promise<PickedAnalysisFile | null> {
   if (typeof document === 'undefined') {
-    return null;
+    const result = await DocumentPicker.getDocumentAsync({
+      copyToCacheDirectory: true,
+      multiple: false,
+      type: ['application/pdf', 'image/jpeg', 'image/png', 'image/heic', 'image/heif'],
+    });
+    const asset = result.canceled ? null : result.assets[0];
+    if (!asset) {
+      return null;
+    }
+    const response = await fetch(asset.uri);
+    const blob = await response.blob();
+    return { fileName: asset.name, mimeType: asset.mimeType || blob.type || 'application/octet-stream', byteSize: asset.size || blob.size, blob };
   }
 
   return new Promise((resolve) => {
@@ -36,7 +48,7 @@ export function UploadAnalysisScreen() {
     const selectedFile = await pickAnalysisFile();
     if (!selectedFile) {
       setStatus('error');
-      setErrorMessage('Выбор файла доступен в Expo Web. Для iOS/Android нужен модуль document picker.');
+      setErrorMessage('Файл не выбран.');
       return;
     }
 
@@ -45,11 +57,9 @@ export function UploadAnalysisScreen() {
 
     try {
       setStatus('processing');
-      const uploadSession = await uploadAnalysisFile(selectedFile);
-      await uploadBinaryToSignedUrl(uploadSession.upload.signed_url, selectedFile);
-      await runOcrForJob(uploadSession.job.id);
+      const uploadSession = await uploadAnalysisAndRunPipeline(selectedFile);
       setAnalysisId(uploadSession.analysis.id);
-      setStatus('ai_processing');
+      setStatus('completed');
     } catch (error) {
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Не удалось загрузить файл');
@@ -70,6 +80,7 @@ export function UploadAnalysisScreen() {
         </Pressable>
         {file ? <Body>{file.fileName} · {Math.round(file.byteSize / 1024)} КБ</Body> : null}
         {analysisId ? <Body>analysis_id: {analysisId}</Body> : null}
+        {status === 'completed' ? <Body>Статус обработки: completed</Body> : null}
         {errorMessage ? <Body>{errorMessage}</Body> : null}
       </SectionCard>
       <SectionCard>
