@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../../src/screens/ScreenPlaceholder';
+import { AnalysisResultScreen } from '../../../src/features/analyses/AnalysisResultScreen';
 
 export default function AnalysisResultRoute() {
-  return <ScreenPlaceholder routeId="results" />;
+  return <AnalysisResultScreen />;
 }

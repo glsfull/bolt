@@ -11,6 +11,17 @@ const aiRouteSource = readFileSync('frontend/mobile/app/(tabs)/ai.tsx', 'utf8');
 const programsRouteSource = readFileSync('frontend/mobile/app/(tabs)/programs.tsx', 'utf8');
 const profileRouteSource = readFileSync('frontend/mobile/app/(tabs)/profile.tsx', 'utf8');
 const demoDataSource = readFileSync('frontend/mobile/src/features/demoData.ts', 'utf8');
+const supabaseReadSource = readFileSync('frontend/mobile/src/services/supabase/readLayer.ts', 'utf8');
+const uploadRouteSource = readFileSync('frontend/mobile/app/analysis/upload.tsx', 'utf8');
+const cameraRouteSource = readFileSync('frontend/mobile/app/analysis/camera.tsx', 'utf8');
+const resultRouteSource = readFileSync('frontend/mobile/app/analysis/result/[id].tsx', 'utf8');
+const resultScreenSource = readFileSync('frontend/mobile/src/features/analyses/AnalysisResultScreen.tsx', 'utf8');
+const uploadScreenSource = readFileSync('frontend/mobile/src/features/analyses/UploadAnalysisScreen.tsx', 'utf8');
+const cameraScreenSource = readFileSync('frontend/mobile/src/features/analyses/CameraAnalysisScreen.tsx', 'utf8');
+const risksRouteSource = readFileSync('frontend/mobile/app/risks/index.tsx', 'utf8');
+const reportRouteSource = readFileSync('frontend/mobile/app/report/index.tsx', 'utf8');
+const risksScreenSource = readFileSync('frontend/mobile/src/features/risks/RisksScreen.tsx', 'utf8');
+const reportScreenSource = readFileSync('frontend/mobile/src/features/report/DoctorReportScreen.tsx', 'utf8');
 
 const requiredRouteIds = [
   'home',
@@ -106,3 +117,37 @@ assert.match(profileRouteSource, /ProfileScreen/, 'profile tab should render the
 for (const demoEntity of ['dashboardSummary', 'analysisHistory', 'symptomTags', 'healthPrograms', 'profileSummary']) {
   assert.match(demoDataSource, new RegExp(`export const ${demoEntity}`), `missing demo data ${demoEntity}`);
 }
+
+for (const demoEntity of ['analysisMarkers', 'latestWarnings', 'riskAssessments', 'doctorReportPreview']) {
+  assert.match(demoDataSource, new RegExp(`export const ${demoEntity}`), `missing stage 3 demo data ${demoEntity}`);
+}
+
+for (const status of ['low', 'normal', 'high', 'critical']) {
+  assert.match(demoDataSource, new RegExp(`status: '${status}'`), `missing marker status ${status}`);
+  assert.match(resultScreenSource, new RegExp(`${status}`), `result screen does not render status ${status}`);
+}
+
+for (const readExport of ['getProfileSummary', 'getAnalysisHistory', 'getHealthPrograms', 'getLatestWarnings', 'getAnalysisResult']) {
+  assert.match(supabaseReadSource, new RegExp(`export async function ${readExport}`), `missing Supabase read-layer function ${readExport}`);
+}
+
+assert.match(supabaseReadSource, /isSupabaseConfigured/, 'read layer should guard Supabase usage by env configuration');
+assert.match(supabaseReadSource, /demoData/, 'read layer should keep demo fixtures as fallback');
+
+for (const [source, component] of [
+  [uploadRouteSource, 'UploadAnalysisScreen'],
+  [cameraRouteSource, 'CameraAnalysisScreen'],
+  [resultRouteSource, 'AnalysisResultScreen'],
+  [risksRouteSource, 'RisksScreen'],
+  [reportRouteSource, 'DoctorReportScreen'],
+]) {
+  assert.doesNotMatch(source, /ScreenPlaceholder/, `${component} route still uses placeholder`);
+  assert.match(source, new RegExp(component), `${component} route is not wired`);
+}
+
+for (const token of ['analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processing', 'completed']) {
+  assert.match(uploadScreenSource + cameraScreenSource, new RegExp(token), `missing backend job contract token ${token}`);
+}
+
+assert.match(risksScreenSource, /medicalDisclaimer/, 'risk screen should show medical disclaimer');
+assert.match(reportScreenSource, /medicalDisclaimer/, 'doctor report screen should include medical disclaimer');

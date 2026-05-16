@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { DoctorReportScreen } from '../../src/features/report/DoctorReportScreen';
 
 export default function ReportRoute() {
-  return <ScreenPlaceholder routeId="report" />;
+  return <DoctorReportScreen />;
 }
