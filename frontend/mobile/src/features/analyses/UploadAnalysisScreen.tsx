@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import { Pressable, Text, View } from 'react-native';
 
-import { uploadAnalysisAndRunPipeline } from '../../services/supabase/readLayer';
+import { uploadAnalysisFileAndTrackJob } from '../../services/supabase/readLayer';
 import { colors, radius, spacing } from '../../theme';
 import { Body, Eyebrow, ScreenShell, SectionCard, Title } from '../shared/components';
 
@@ -42,6 +42,8 @@ export function UploadAnalysisScreen() {
   const [status, setStatus] = useState('empty');
   const [errorMessage, setErrorMessage] = useState('');
   const [analysisId, setAnalysisId] = useState('');
+  const [jobId, setJobId] = useState('');
+  const [jobStatus, setJobStatus] = useState('');
 
   async function handlePickAndUpload() {
     setErrorMessage('');
@@ -57,9 +59,11 @@ export function UploadAnalysisScreen() {
 
     try {
       setStatus('processing');
-      const uploadSession = await uploadAnalysisAndRunPipeline(selectedFile);
+      const uploadSession = await uploadAnalysisFileAndTrackJob(selectedFile);
       setAnalysisId(uploadSession.analysis.id);
-      setStatus('completed');
+      setJobId(uploadSession.job.id);
+      setJobStatus(uploadSession.status);
+      setStatus('uploaded');
     } catch (error) {
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Не удалось загрузить файл');
@@ -80,7 +84,9 @@ export function UploadAnalysisScreen() {
         </Pressable>
         {file ? <Body>{file.fileName} · {Math.round(file.byteSize / 1024)} КБ</Body> : null}
         {analysisId ? <Body>analysis_id: {analysisId}</Body> : null}
-        {status === 'completed' ? <Body>Статус обработки: completed</Body> : null}
+        {jobId ? <Body>job.id: {jobId}</Body> : null}
+        {jobStatus ? <Body>Статус обработки: {jobStatus}</Body> : null}
+        {status === 'uploaded' ? <Body>Файл загружен. Дальше результат обновляется по analysis_jobs.</Body> : null}
         {errorMessage ? <Body>{errorMessage}</Body> : null}
       </SectionCard>
       <SectionCard>
