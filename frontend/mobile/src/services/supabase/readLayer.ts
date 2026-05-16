@@ -65,6 +65,18 @@ export async function uploadAnalysisFile(file: { fileName: string; mimeType: str
   return data;
 }
 
+export async function uploadAnalysisAndRunPipeline(file: UploadableAnalysisFile) {
+  const uploadSession = await uploadAnalysisFile(file);
+  await uploadBinaryToSignedUrl(uploadSession.upload.signed_url, file);
+  await runOcrForJob(uploadSession.job.id);
+  const interpretation = await interpretAnalysisForJob(uploadSession.job.id);
+
+  return {
+    ...uploadSession,
+    interpretation,
+  };
+}
+
 export async function uploadBinaryToSignedUrl(signedUrl: string, file: UploadableAnalysisFile) {
   if (!isSupabaseConfigured || !signedUrl || !file.blob) {
     return;
@@ -87,6 +99,27 @@ export async function runOcrForJob(jobId: string) {
   }
 
   const { data, error } = await supabase.functions.invoke('run-ocr', {
+    body: { job_id: jobId },
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function interpretAnalysisForJob(jobId: string) {
+  if (!isSupabaseConfigured || !supabase) {
+    return {
+      job_id: jobId,
+      analysis_id: demoData.analysisProcessingJob.analysis_id,
+      status: 'completed',
+      markers: demoData.analysisMarkers,
+    };
+  }
+
+  const { data, error } = await supabase.functions.invoke('interpret-analysis', {
     body: { job_id: jobId },
   });
 
