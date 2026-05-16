@@ -222,6 +222,14 @@ for (const token of ['analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processi
   assert.match(uploadScreenSource + cameraScreenSource, new RegExp(token), `missing backend job contract token ${token}`);
 }
 
+for (const token of ['pickAnalysisFile', 'uploadBinaryToSignedUrl', 'runOcrForJob', 'signed_url', 'job.id']) {
+  assert.match(uploadScreenSource + supabaseReadSource, new RegExp(token), `upload flow missing ${token}`);
+}
+
+for (const token of ['getAnalysisProcessingJob', 'getAnalysisResult', 'setInterval', 'error_message', 'analysis_markers']) {
+  assert.match(resultScreenSource, new RegExp(token), `result screen missing live job/marker token ${token}`);
+}
+
 for (const token of ['validateUploadRequest', 'createSignedUploadUrl', 'analysis_files', 'analysis_jobs']) {
   assert.match(uploadFunctionSource, new RegExp(token), `upload-analysis-file missing ${token}`);
 }
