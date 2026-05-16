@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import type { MarkerStatus } from '../demoData';
-import { analysisMarkers } from '../demoData';
+import { analysisMarkers as demoAnalysisMarkers, analysisProcessingJob } from '../demoData';
 import { getAnalysisProcessingJob, getAnalysisResult } from '../../services/supabase/readLayer';
 import { Badge, Body, Eyebrow, ScreenShell, SectionCard, Title } from '../shared/components';
 import { colors, radius, spacing } from '../../theme';
@@ -20,11 +21,52 @@ const statusLabel: Record<MarkerStatus, string> = {
   critical: 'Критично',
 };
 
-void getAnalysisProcessingJob;
-void getAnalysisResult;
+const jobStatusLabel: Record<string, string> = {
+  uploaded: 'Файл загружен',
+  ocr_processing: 'OCR распознает файл',
+  ai_processing: 'ИИ нормализует показатели',
+  completed: 'Расшифровка готова',
+  failed: 'Ошибка обработки',
+};
 
-export function AnalysisResultScreen() {
-  const categories = [...new Set(analysisMarkers.map((marker) => marker.category))];
+export function AnalysisResultScreen({ analysisId = 'cbc-2026-05-13' }: { analysisId?: string }) {
+  const [job, setJob] = useState(analysisProcessingJob);
+  const [markers, setMarkers] = useState(demoAnalysisMarkers);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function refresh() {
+      const [nextJob, nextMarkers] = await Promise.all([
+        getAnalysisProcessingJob(analysisId),
+        getAnalysisResult(analysisId),
+      ]);
+      if (mounted) {
+        setJob(nextJob);
+        setMarkers(nextMarkers.map((marker: any) => ({
+          id: marker.id,
+          name: marker.name,
+          category: marker.category,
+          value: Number(marker.value ?? 0),
+          unit: marker.unit ?? '',
+          min: Number(marker.ref_min ?? marker.min ?? 0),
+          max: Number(marker.ref_max ?? marker.max ?? 0),
+          status: marker.status,
+          interpretation: marker.interpretation ?? '',
+          recommendation: marker.recommendation ?? '',
+        })));
+      }
+    }
+
+    refresh();
+    const timer = setInterval(refresh, 5000);
+    return () => {
+      mounted = false;
+      clearInterval(timer);
+    };
+  }, [analysisId]);
+
+  const categories = [...new Set(markers.map((marker) => marker.category))];
 
   return (
     <ScreenShell>
@@ -32,11 +74,18 @@ export function AnalysisResultScreen() {
         <Eyebrow>analysis/result/[id]</Eyebrow>
         <Title>Расшифровка анализа</Title>
       </View>
+      <SectionCard>
+        <Eyebrow>analysis_jobs</Eyebrow>
+        <Title>{jobStatusLabel[job.status] ?? job.status}</Title>
+        <Body>Текущий статус: {job.status}</Body>
+        {job.error_message ? <Body>{job.error_message}</Body> : null}
+        <Body>Источник результата: analysis_markers</Body>
+      </SectionCard>
       {categories.map((category) => (
         <SectionCard key={category}>
           <Eyebrow>{category}</Eyebrow>
           <View style={{ gap: spacing[3], marginTop: spacing[3] }}>
-            {analysisMarkers
+            {markers
               .filter((marker) => marker.category === category)
               .map((marker) => {
                 const total = marker.max === 0 ? marker.value : marker.max * 1.35;
