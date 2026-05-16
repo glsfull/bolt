@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { ProfileScreen } from '../../src/features/profile/ProfileScreen';
 
 export default function ProfileRoute() {
-  return <ScreenPlaceholder routeId="profile" />;
+  return <ProfileScreen />;
 }

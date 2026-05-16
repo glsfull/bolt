@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { HistoryScreen } from '../../src/features/history/HistoryScreen';
 
 export default function HistoryRoute() {
-  return <ScreenPlaceholder routeId="history" />;
+  return <HistoryScreen />;
 }

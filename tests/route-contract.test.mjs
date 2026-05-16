@@ -5,6 +5,12 @@ const routesSource = readFileSync('frontend/mobile/src/navigation/routes.ts', 'u
 const themeSource = readFileSync('frontend/mobile/src/theme/index.ts', 'utf8');
 const screenStatesSource = readFileSync('frontend/mobile/src/navigation/screenStates.ts', 'utf8');
 const backendPlanSource = readFileSync('backend/supabase/migrations/001_production_schema_plan.sql', 'utf8');
+const homeRouteSource = readFileSync('frontend/mobile/app/(tabs)/index.tsx', 'utf8');
+const historyRouteSource = readFileSync('frontend/mobile/app/(tabs)/history.tsx', 'utf8');
+const aiRouteSource = readFileSync('frontend/mobile/app/(tabs)/ai.tsx', 'utf8');
+const programsRouteSource = readFileSync('frontend/mobile/app/(tabs)/programs.tsx', 'utf8');
+const profileRouteSource = readFileSync('frontend/mobile/app/(tabs)/profile.tsx', 'utf8');
+const demoDataSource = readFileSync('frontend/mobile/src/features/demoData.ts', 'utf8');
 
 const requiredRouteIds = [
   'home',
@@ -89,4 +95,14 @@ for (const folder of [
   'ocr_provider_settings',
 ]) {
   assert.match(backendPlanSource, new RegExp(folder), `missing backend schema marker ${folder}`);
+}
+
+assert.match(homeRouteSource, /HomeScreen/, 'home tab should render the stage 2 screen implementation');
+assert.match(historyRouteSource, /HistoryScreen/, 'history tab should render the stage 2 screen implementation');
+assert.match(aiRouteSource, /AiScreen/, 'ai tab should render the stage 2 screen implementation');
+assert.match(programsRouteSource, /ProgramsScreen/, 'programs tab should render the stage 2 screen implementation');
+assert.match(profileRouteSource, /ProfileScreen/, 'profile tab should render the stage 2 screen implementation');
+
+for (const demoEntity of ['dashboardSummary', 'analysisHistory', 'symptomTags', 'healthPrograms', 'profileSummary']) {
+  assert.match(demoDataSource, new RegExp(`export const ${demoEntity}`), `missing demo data ${demoEntity}`);
 }
