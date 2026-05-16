@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { MarkerDetailScreen } from '../../src/features/encyclopedia/EncyclopediaScreen';
 
 export default function MarkerDetailRoute() {
-  return <ScreenPlaceholder routeId="encyclopedia" />;
+  return <MarkerDetailScreen />;
 }

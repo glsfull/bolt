@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { ProgramDetailScreen } from '../../src/features/programs/ProgramDetailScreen';
 
 export default function ProgramDetailRoute() {
-  return <ScreenPlaceholder routeId="programDetail" />;
+  return <ProgramDetailScreen />;
 }

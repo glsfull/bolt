@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { EncyclopediaScreen } from '../../src/features/encyclopedia/EncyclopediaScreen';
 
 export default function EncyclopediaRoute() {
-  return <ScreenPlaceholder routeId="encyclopedia" />;
+  return <EncyclopediaScreen />;
 }

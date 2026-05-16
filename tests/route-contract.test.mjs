@@ -21,8 +21,19 @@ const uploadScreenSource = readFileSync('frontend/mobile/src/features/analyses/U
 const cameraScreenSource = readFileSync('frontend/mobile/src/features/analyses/CameraAnalysisScreen.tsx', 'utf8');
 const risksRouteSource = readFileSync('frontend/mobile/app/risks/index.tsx', 'utf8');
 const reportRouteSource = readFileSync('frontend/mobile/app/report/index.tsx', 'utf8');
+const medicationsRouteSource = readFileSync('frontend/mobile/app/medications/index.tsx', 'utf8');
+const encyclopediaRouteSource = readFileSync('frontend/mobile/app/encyclopedia/index.tsx', 'utf8');
+const markerDetailRouteSource = readFileSync('frontend/mobile/app/encyclopedia/[markerId].tsx', 'utf8');
+const authRouteSource = readFileSync('frontend/mobile/app/auth/index.tsx', 'utf8');
+const adminRouteSource = readFileSync('frontend/mobile/app/admin/index.tsx', 'utf8');
+const programDetailRouteSource = readFileSync('frontend/mobile/app/programs/[programId].tsx', 'utf8');
+const activeProgramRouteSource = readFileSync('frontend/mobile/app/programs/active/index.tsx', 'utf8');
 const risksScreenSource = readFileSync('frontend/mobile/src/features/risks/RisksScreen.tsx', 'utf8');
 const reportScreenSource = readFileSync('frontend/mobile/src/features/report/DoctorReportScreen.tsx', 'utf8');
+const medicationsScreenSource = readFileSync('frontend/mobile/src/features/medications/MedicationsScreen.tsx', 'utf8');
+const encyclopediaScreenSource = readFileSync('frontend/mobile/src/features/encyclopedia/EncyclopediaScreen.tsx', 'utf8');
+const authScreenSource = readFileSync('frontend/mobile/src/features/auth/AuthScreen.tsx', 'utf8');
+const adminScreenSource = readFileSync('frontend/mobile/src/features/admin/AdminScreen.tsx', 'utf8');
 const implementationPlanSource = readFileSync('docs/Реализация.md', 'utf8');
 
 const requiredRouteIds = [
@@ -192,6 +203,13 @@ for (const [source, component] of [
   [resultRouteSource, 'AnalysisResultScreen'],
   [risksRouteSource, 'RisksScreen'],
   [reportRouteSource, 'DoctorReportScreen'],
+  [medicationsRouteSource, 'MedicationsScreen'],
+  [encyclopediaRouteSource, 'EncyclopediaScreen'],
+  [markerDetailRouteSource, 'MarkerDetailScreen'],
+  [authRouteSource, 'AuthScreen'],
+  [adminRouteSource, 'AdminScreen'],
+  [programDetailRouteSource, 'ProgramDetailScreen'],
+  [activeProgramRouteSource, 'ActiveProgramScreen'],
 ]) {
   assert.doesNotMatch(source, /ScreenPlaceholder/, `${component} route still uses placeholder`);
   assert.match(source, new RegExp(component), `${component} route is not wired`);
@@ -203,6 +221,22 @@ for (const token of ['analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processi
 
 assert.match(risksScreenSource, /medicalDisclaimer/, 'risk screen should show medical disclaimer');
 assert.match(reportScreenSource, /medicalDisclaimer/, 'doctor report screen should include medical disclaimer');
+
+for (const token of ['morning', 'afternoon', 'evening', 'adherence', 'reminder']) {
+  assert.match(medicationsScreenSource, new RegExp(token), `missing medication schedule token ${token}`);
+}
+
+for (const token of ['analysisMarkers', 'search', 'markerCard', 'reference']) {
+  assert.match(encyclopediaScreenSource, new RegExp(token), `missing encyclopedia token ${token}`);
+}
+
+for (const token of ['loginError', 'recovery', 'Supabase Auth', 'email']) {
+  assert.match(authScreenSource, new RegExp(token), `missing auth state token ${token}`);
+}
+
+for (const token of ['aiOcrSettings', 'limits', 'disabledFeatures', 'audit_log']) {
+  assert.match(adminScreenSource, new RegExp(token), `missing admin state token ${token}`);
+}
 
 assert.match(implementationPlanSource, /## 13\. Что сделано на этапе 3/, 'implementation plan should document completed stage 3');
 assert.match(implementationPlanSource, /## 14\. Рекомендуемые следующие шаги/, 'implementation plan should document recommended next steps');

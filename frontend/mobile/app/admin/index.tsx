@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { AdminScreen } from '../../src/features/admin/AdminScreen';
 
 export default function AdminRoute() {
-  return <ScreenPlaceholder routeId="admin" />;
+  return <AdminScreen />;
 }

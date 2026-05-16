@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { AuthScreen } from '../../src/features/auth/AuthScreen';
 
 export default function AuthRoute() {
-  return <ScreenPlaceholder routeId="auth" />;
+  return <AuthScreen />;
 }
