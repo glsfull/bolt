@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { CameraAnalysisScreen } from '../../src/features/analyses/CameraAnalysisScreen';
 
 export default function CameraRoute() {
-  return <ScreenPlaceholder routeId="camera" />;
+  return <CameraAnalysisScreen />;
 }

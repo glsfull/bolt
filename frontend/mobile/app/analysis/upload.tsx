@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { UploadAnalysisScreen } from '../../src/features/analyses/UploadAnalysisScreen';
 
 export default function UploadRoute() {
-  return <ScreenPlaceholder routeId="upload" />;
+  return <UploadAnalysisScreen />;
 }

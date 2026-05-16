@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 
-import { env } from '../../lib/env';
+import { env, isSupabaseConfigured } from '../../lib/env';
 
-export const supabase = createClient(env.supabaseUrl, env.supabaseAnonKey);
+export const supabase = isSupabaseConfigured ? createClient(env.supabaseUrl, env.supabaseAnonKey) : null;

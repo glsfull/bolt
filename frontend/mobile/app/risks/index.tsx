@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '../../src/screens/ScreenPlaceholder';
+import { RisksScreen } from '../../src/features/risks/RisksScreen';
 
 export default function RisksRoute() {
-  return <ScreenPlaceholder routeId="risks" />;
+  return <RisksScreen />;
 }

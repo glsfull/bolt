@@ -33,7 +33,7 @@ export function Body({ children }: { children: ReactNode }) {
 
 export function Badge({ children, tone = 'emerald' }: { children: ReactNode; tone?: 'emerald' | 'amber' | 'red' | 'blue' }) {
   const palette = {
-    emerald: [colors.emerald[50], colors.emerald[700]],
+    emerald: [colors.emerald[50], colors.emerald[800]],
     amber: [colors.amber[50], colors.amber[800]],
     red: [colors.red[50], colors.red[700]],
     blue: [colors.blue[50], colors.blue[800]],
