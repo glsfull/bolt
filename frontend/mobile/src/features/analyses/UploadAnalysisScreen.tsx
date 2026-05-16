@@ -1,9 +1,12 @@
 import { Text, View } from 'react-native';
 
+import { uploadAnalysisFile } from '../../services/supabase/readLayer';
 import { colors, radius, spacing } from '../../theme';
 import { Body, Eyebrow, ScreenShell, SectionCard, Title } from '../shared/components';
 
-const backendJobContract = ['analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processing', 'completed'];
+const backendJobContract = ['upload-analysis-file', 'analysis_jobs', 'uploaded', 'ocr_processing', 'ai_processing', 'completed'];
+
+void uploadAnalysisFile;
 
 export function UploadAnalysisScreen() {
   return (

@@ -2,6 +2,6 @@
   "name": "bolt-rewrite-workspace",
   "private": true,
   "scripts": {
-    "test": "node tests/route-contract.test.mjs"
+    "test": "node tests/route-contract.test.mjs && node tests/analysis-pipeline.test.mjs"
   }
 }
