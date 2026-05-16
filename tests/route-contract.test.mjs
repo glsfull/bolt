@@ -239,7 +239,7 @@ for (const token of ['aiOcrSettings', 'limits', 'disabledFeatures', 'audit_log']
 }
 
 assert.match(implementationPlanSource, /## 13\. Что сделано на этапе 3/, 'implementation plan should document completed stage 3');
-assert.match(implementationPlanSource, /## 14\. Рекомендуемые следующие шаги/, 'implementation plan should document recommended next steps');
+assert.match(implementationPlanSource, /## 15\. Рекомендуемые следующие шаги после issue 26/, 'implementation plan should document recommended next steps after issue 26');
 
 for (const nextStep of [
   'Expo web',
@@ -252,3 +252,9 @@ for (const nextStep of [
 ]) {
   assert.match(implementationPlanSource, new RegExp(nextStep), `missing recommended next step ${nextStep}`);
 }
+
+assert.match(
+  implementationPlanSource,
+  /остается 10 крупных задач/,
+  'implementation plan should state remaining project task count after issue 26',
+);
