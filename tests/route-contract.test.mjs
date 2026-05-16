@@ -264,7 +264,7 @@ for (const token of ['aiOcrSettings', 'limits', 'disabledFeatures', 'audit_log']
 assert.match(implementationPlanSource, /## 13\. Что сделано на этапе 3/, 'implementation plan should document completed stage 3');
 assert.match(implementationPlanSource, /## 15\. Что сделано на этапе 5/, 'implementation plan should document completed stage 5');
 assert.match(implementationPlanSource, /## 16\. Рекомендуемые следующие шаги после issue 28/, 'implementation plan should document recommended next steps after issue 28');
-assert.match(implementationPlanSource, /## 17\. Следующий этап после issue 32/, 'implementation plan should document the next stage after issue 32');
+assert.match(implementationPlanSource, /## 17\. Реализация issue 34: этап 6/, 'implementation plan should document issue 34 stage 6');
 
 for (const nextStep of [
   'Expo web',
@@ -281,16 +281,17 @@ for (const nextStep of [
 assert.match(
   implementationPlanSource,
   /остается 7 крупных задач/,
-  'implementation plan should state remaining project task count after issue 32',
+  'implementation plan should state remaining project task count after issue 34',
 );
 
-for (const issue32Token of [
-  'этапу 6',
+for (const issue34Token of [
+  'этапа 6',
+  'Основные этапы выполнения задачи',
   'signed upload URL',
   'После проверки вопроса схемы следующий шаг',
   'После проверки вопроса выбора файла следующий шаг',
   'После проверки вопроса screenshot review следующий шаг',
   'placeholder-экранов',
 ]) {
-  assert.match(implementationPlanSource, new RegExp(issue32Token), `missing issue 32 implementation detail ${issue32Token}`);
+  assert.match(implementationPlanSource, new RegExp(issue34Token), `missing issue 34 implementation detail ${issue34Token}`);
 }
