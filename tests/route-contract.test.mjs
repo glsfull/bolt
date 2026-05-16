@@ -5,6 +5,7 @@ const routesSource = readFileSync('frontend/mobile/src/navigation/routes.ts', 'u
 const themeSource = readFileSync('frontend/mobile/src/theme/index.ts', 'utf8');
 const screenStatesSource = readFileSync('frontend/mobile/src/navigation/screenStates.ts', 'utf8');
 const backendPlanSource = readFileSync('backend/supabase/migrations/001_production_schema_plan.sql', 'utf8');
+const productionMigrationsSource = readFileSync('backend/supabase/migrations/202605160001_stage4_core_schema.sql', 'utf8');
 const homeRouteSource = readFileSync('frontend/mobile/app/(tabs)/index.tsx', 'utf8');
 const historyRouteSource = readFileSync('frontend/mobile/app/(tabs)/history.tsx', 'utf8');
 const aiRouteSource = readFileSync('frontend/mobile/app/(tabs)/ai.tsx', 'utf8');
@@ -107,6 +108,56 @@ for (const folder of [
   'ocr_provider_settings',
 ]) {
   assert.match(backendPlanSource, new RegExp(folder), `missing backend schema marker ${folder}`);
+}
+
+for (const tableName of [
+  'profiles',
+  'health_profiles',
+  'analysis_files',
+  'analyses',
+  'analysis_markers',
+  'analysis_jobs',
+  'doctor_reports',
+  'risk_assessments',
+  'medications',
+  'health_programs',
+  'admin_settings',
+  'audit_log',
+]) {
+  assert.match(
+    productionMigrationsSource,
+    new RegExp(`create table if not exists public\\.${tableName}\\b`, 'i'),
+    `missing applied migration table ${tableName}`,
+  );
+  assert.match(
+    productionMigrationsSource,
+    new RegExp(`alter table public\\.${tableName} enable row level security`, 'i'),
+    `missing RLS enablement for ${tableName}`,
+  );
+}
+
+for (const storageToken of [
+  "'analysis-files'",
+  "'doctor-reports'",
+  'storage.buckets',
+  'storage.objects',
+  'createSignedUploadUrl',
+  'createSignedUrl',
+]) {
+  assert.match(productionMigrationsSource, new RegExp(storageToken), `missing storage contract ${storageToken}`);
+}
+
+for (const auditToken of ['audit_table_changes', 'audit_log', 'tg_audit_analyses', 'tg_audit_admin_settings']) {
+  assert.match(productionMigrationsSource, new RegExp(auditToken), `missing audit trail token ${auditToken}`);
+}
+
+for (const indexToken of [
+  'analysis_jobs_user_status_idx',
+  'analysis_markers_analysis_status_idx',
+  'risk_assessments_user_level_idx',
+  'medications_user_active_idx',
+]) {
+  assert.match(productionMigrationsSource, new RegExp(indexToken), `missing index ${indexToken}`);
 }
 
 assert.match(homeRouteSource, /HomeScreen/, 'home tab should render the stage 2 screen implementation');
